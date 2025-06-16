@@ -1,7 +1,6 @@
 import { connectDB } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { Unit } from "@/models/Unit";
-import { Lecture } from "@/models/Lecture";
 
 const units = [
   { number: 1, title: "Discrete Structures and Optimization", lectures: 8 },
@@ -38,7 +37,6 @@ export async function GET() {
         title: `Lecture ${i + 1}`,
       }));
 
-      await Lecture.insertMany(lecturesArray);
       console.log(`✅ Inserted ${unit.lectures} lectures for Unit ${unit.number}`);
     }
 

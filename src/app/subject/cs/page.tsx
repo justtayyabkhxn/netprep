@@ -19,6 +19,7 @@ export default function CSSubjectPage() {
   const [units, setUnits] = useState<Unit[]>([]);
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState<UnitProgress>({});
+  const [total, setTotal] = useState({ done: 0, total: 0 }); // ✅ NEW
 
   useEffect(() => {
     const getUnits = async () => {
@@ -35,6 +36,9 @@ export default function CSSubjectPage() {
 
     const calculateProgress = (units: Unit[]) => {
       const data: UnitProgress = {};
+      let totalDone = 0;
+      let totalLectures = 0;
+
       units.forEach((unit) => {
         let done = 0;
         for (let i = 1; i <= unit.lectures; i++) {
@@ -43,22 +47,40 @@ export default function CSSubjectPage() {
             done++;
           }
         }
+        totalDone += done;
+        totalLectures += unit.lectures;
         data[unit._id] = done;
       });
+
       setProgress(data);
+      setTotal({ done: totalDone, total: totalLectures }); // ✅ Save total progress
     };
 
     getUnits();
   }, []);
 
+  const overallPercent =
+    total.total === 0 ? 0 : Math.round((total.done / total.total) * 100);
+
   return (
     <div className="min-h-screen bg-zinc-900 text-zinc-100 py-10 px-6">
       <div className="max-w-5xl mx-auto">
-        <div className="flex items-center gap-3 mb-6">
+        <div className="flex items-center gap-3 mb-3">
           <GraduationCap className="text-purple-400 w-7 h-7" />
           <h1 className="text-3xl font-bold tracking-tight text-white">
             Computer Science
           </h1>
+        </div>
+
+        {/* ✅ Total Progress Bar */}
+        <p className="text-sm text-zinc-400 mb-1">
+          Total Progress: {total.done} of {total.total} lectures completed ({overallPercent}%)
+        </p>
+        <div className="w-full h-3 bg-zinc-800 rounded-full mb-6">
+          <div
+            className="h-full bg-green-500 rounded-full transition-all duration-300"
+            style={{ width: `${overallPercent}%` }}
+          />
         </div>
 
         <Link
@@ -102,7 +124,6 @@ export default function CSSubjectPage() {
                     </span>
                   </div>
 
-                  {/* Progress Bar */}
                   <div className="w-full h-2 bg-zinc-700 rounded-full mt-2">
                     <div
                       className="h-full bg-green-500 rounded-full transition-all duration-300"

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import axios from "axios";
-import { CheckCircle, Circle, ArrowLeft } from "lucide-react";
+import { CheckCircle, Circle, ArrowLeft, VideoIcon } from "lucide-react";
 import Link from "next/link";
 
 type Unit = {
@@ -96,7 +96,10 @@ export default function UnitDetailPage() {
                   : "bg-zinc-800 border-zinc-700"
               }`}
             >
-              <span className="font-medium">🎥 Lecture {n}</span>
+              <span className="font-medium inline-flex items-center gap-2">
+                <VideoIcon className="w-5 h-5" color="#008000" />
+                Lecture {n}
+              </span>
               <button
                 onClick={() => toggleLecture(n)}
                 className={`text-xl transition ${
