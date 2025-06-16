@@ -10,6 +10,7 @@ export default function AddUnitPage() {
   const [form, setForm] = useState({
     title: "",
     lectures: "",
+    number: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -25,10 +26,12 @@ export default function AddUnitPage() {
     setMessage("");
 
     try {
-      const { title, lectures } = form;
+      const { title, lectures, number } = form;
+
       const res = await axios.post("/api/units/add", {
         title,
         lectures: parseInt(lectures),
+        number: parseInt(number),
       });
 
       if (res.status === 201) {
@@ -51,6 +54,18 @@ export default function AddUnitPage() {
         <h1 className="text-2xl font-bold mb-6">➕ Add New Unit</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+
+          <div>
+            <label className="block mb-1">Unit Number</label>
+            <input
+              type="number"
+              name="number"
+              required
+              value={form.number}
+              onChange={handleChange}
+              className="w-full px-4 py-2 rounded bg-zinc-800 border border-zinc-600"
+            />
+          </div>
           <div>
             <label className="block mb-1">Unit Title</label>
             <input
@@ -74,6 +89,8 @@ export default function AddUnitPage() {
               className="w-full px-4 py-2 rounded bg-zinc-800 border border-zinc-600"
             />
           </div>
+
+          
 
           <button
             type="submit"

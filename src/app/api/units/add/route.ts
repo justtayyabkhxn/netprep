@@ -8,6 +8,7 @@ export async function POST(req: Request) {
 
     const body = await req.json();
     const { title, lectures } = body;
+
     if (
       typeof title !== "string" ||
       typeof lectures !== "number"
@@ -15,14 +16,16 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: "Invalid or missing fields" }, { status: 400 });
     }
 
-    // Check for duplicates using name
     const unitExists = await Unit.findOne({ title: new RegExp(`^${title}$`, 'i') });
     if (unitExists) {
       return NextResponse.json({ message: "Unit already exists" }, { status: 409 });
     }
 
-    // Save unit with lowercase name (optional)
-    await new Unit({ title, lectures }).save();
+    // ✅ Find max number and assign next
+    const lastUnit = await Unit.findOne().sort({ number: -1 });
+    const nextNumber = lastUnit ? lastUnit.number + 1 : 1;
+
+    await new Unit({ number: nextNumber, title, lectures }).save();
 
     return NextResponse.json({ message: "✅ Unit created successfully." }, { status: 201 });
   } catch (error) {

@@ -6,7 +6,7 @@ export async function GET() {
   try {
     await connectDB();
 
-    const units = await Unit.find().sort({ title: 1 }); // or { number: 1 } if you still have it
+const units = await Unit.find().sort({ number: 1 });
 
     const result = units.map((unit) => ({
       _id: unit._id,
