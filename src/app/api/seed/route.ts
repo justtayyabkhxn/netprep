@@ -31,12 +31,6 @@ export async function GET() {
       console.log(`📦 Seeding Unit ${unit.number}: ${unit.title}`);
       await new Unit({ number: unit.number, title: unit.title }).save();
 
-      const lecturesArray = Array.from({ length: unit.lectures }, (_, i) => ({
-        unitNumber: unit.number,
-        lectureNumber: i + 1,
-        title: `Lecture ${i + 1}`,
-      }));
-
       console.log(`✅ Inserted ${unit.lectures} lectures for Unit ${unit.number}`);
     }
 

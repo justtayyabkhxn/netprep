@@ -8,8 +8,6 @@ export async function POST(req: Request) {
 
     const body = await req.json();
     const { title, lectures } = body;
-    const name = title.toLowerCase(); // ✅ Fix here
-
     if (
       typeof title !== "string" ||
       typeof lectures !== "number"

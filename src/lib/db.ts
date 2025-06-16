@@ -6,7 +6,21 @@ if (!MONGODB_URI) {
   throw new Error("Please define the MONGODB_URI environment variable.");
 }
 
-let cached = (global as any).mongoose || { conn: null, promise: null };
+// Extend global type for caching
+declare global {
+  var mongooseConn: {
+    conn: typeof mongoose | null;
+    promise: Promise<typeof mongoose> | null;
+  } | undefined;
+}
+
+// Use cached instance from global
+const cached = global.mongooseConn || {
+  conn: null,
+  promise: null,
+};
+
+global.mongooseConn = cached;
 
 export async function connectDB() {
   if (cached.conn) return cached.conn;

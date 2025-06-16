@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 
 export default function AddUnitPage() {
@@ -37,8 +37,9 @@ export default function AddUnitPage() {
       } else {
         setMessage(res.data.message || "Something went wrong.");
       }
-    } catch (err: any) {
-      setMessage(err?.response?.data?.message || "Error occurred.");
+    } catch (err) {
+      const error = err as AxiosError<{ message?: string }>;
+      setMessage(error.response?.data?.message || "Error occurred.");
     } finally {
       setLoading(false);
     }
@@ -50,8 +51,6 @@ export default function AddUnitPage() {
         <h1 className="text-2xl font-bold mb-6">➕ Add New Unit</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          
-
           <div>
             <label className="block mb-1">Unit Title</label>
             <input
