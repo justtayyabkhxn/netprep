@@ -67,7 +67,7 @@ export default function CSSubjectPage() {
       <div className="max-w-5xl mx-auto">
         <div className="flex items-center gap-3 mb-3">
           <GraduationCap className="text-purple-400 w-7 h-7" />
-          <h1 className="text-3xl font-bold tracking-tight text-white">
+          <h1 className="text-3xl font-extrabold tracking-tight text-white">
             Computer Science
           </h1>
         </div>

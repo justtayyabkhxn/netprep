@@ -5,7 +5,7 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-zinc-900 text-white flex items-center justify-center px-6 py-12">
       <div className="text-center max-w-2xl">
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-center mb-2">
           <GraduationCap className="w-12 h-12 text-indigo-400" />
         </div>
         <h1 className="text-4xl font-extrabold mb-4">
