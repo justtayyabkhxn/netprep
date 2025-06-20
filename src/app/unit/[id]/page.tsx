@@ -16,6 +16,7 @@ type Unit = {
   _id: string;
   title: string;
   lectures: number;
+  paper: "paper1" | "paper2";
 };
 
 export default function UnitDetailPage() {
@@ -30,7 +31,7 @@ export default function UnitDetailPage() {
       try {
         const res = await axios.get(`/api/unit/${id}`);
         setUnit(res.data);
-        loadProgress(res.data.lectures);
+        loadProgress(res.data.lectures, res.data.paper);
       } catch (err) {
         console.error("Failed to fetch unit", err);
       } finally {
@@ -38,13 +39,13 @@ export default function UnitDetailPage() {
       }
     };
 
-    const loadProgress = (count: number) => {
+    const loadProgress = (count: number, paper: string) => {
       const status: { [key: number]: boolean } = {};
       const dateStore: { [key: number]: string } = {};
 
       for (let i = 1; i <= count; i++) {
-        const key = `unit-${id}-lecture-${i}`;
-        const dateKey = `unit-${id}-lecture-${i}-date`;
+        const key = `${paper}-unit-${id}-lecture-${i}`;
+        const dateKey = `${paper}-unit-${id}-lecture-${i}-date`;
 
         const isComplete = localStorage.getItem(key) === "true";
         const dateDone = localStorage.getItem(dateKey);
@@ -63,8 +64,10 @@ export default function UnitDetailPage() {
   }, [id]);
 
   const toggleLecture = (n: number) => {
-    const key = `unit-${id}-lecture-${n}`;
-    const dateKey = `unit-${id}-lecture-${n}-date`;
+    if (!unit) return;
+
+    const key = `${unit.paper}-unit-${id}-lecture-${n}`;
+    const dateKey = `${unit.paper}-unit-${id}-lecture-${n}-date`;
     const newVal = !completed[n];
 
     localStorage.setItem(key, newVal.toString());
@@ -96,11 +99,11 @@ export default function UnitDetailPage() {
     <div className="min-h-screen bg-zinc-900 text-white p-6 max-w-3xl mx-auto">
       <div className="mb-6 flex items-center justify-between">
         <Link
-          href="/subject/cs"
+          href="/subject"
           className="text-sm text-indigo-400 hover:underline flex items-center gap-1"
         >
           <ArrowLeft className="w-4 h-4" />
-          Back to Units
+          Back to Subject
         </Link>
       </div>
 

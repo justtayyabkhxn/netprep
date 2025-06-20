@@ -113,7 +113,7 @@ export default function Paper1SubjectPage() {
               return (
                 <Link
                   key={unit._id}
-                  href={`/unit-paper1/${unit._id}`}
+                  href={`/unit/${unit._id}`}
                   className="group border border-zinc-700 rounded-2xl p-5 bg-zinc-800 hover:bg-zinc-700 hover:scale-[1.02] transition-all duration-200 shadow-md hover:shadow-xl"
                 >
                   <div className="flex items-start gap-3 mb-2">
