@@ -11,12 +11,15 @@ export default function AddUnitPage() {
     title: "",
     lectures: "",
     number: "",
+    paper: "", // ✅ works
   });
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -26,17 +29,18 @@ export default function AddUnitPage() {
     setMessage("");
 
     try {
-      const { title, lectures, number } = form;
+      const { title, lectures, number, paper } = form;
 
-      const res = await axios.post("/api/units/add", {
+      const res = await axios.post(`/api/units/add`, {
         title,
         lectures: parseInt(lectures),
         number: parseInt(number),
+        paper, // ✅ pass paper in body
       });
 
       if (res.status === 201) {
         setMessage("✅ Unit created successfully!");
-        router.push("/subject/cs");
+        router.push(paper === "paper1" ? "/subject/p1" : "/subject/cs");
       } else {
         setMessage(res.data.message || "Something went wrong.");
       }
@@ -54,6 +58,21 @@ export default function AddUnitPage() {
         <h1 className="text-2xl font-bold mb-6">➕ Add New Unit</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block mb-1">Select Paper</label>
+            <select
+              name="paper"
+              value={form.paper}
+              onChange={handleChange}
+              className="w-full px-4 py-2 rounded bg-zinc-800 border border-zinc-600"
+            >
+              <option value="" disabled>
+                -- Select Paper --
+              </option>
+              <option value="paper1">Paper 1 (General Aptitude)</option>
+              <option value="paper2">Paper 2 (Computer Science)</option>
+            </select>
+          </div>
 
           <div>
             <label className="block mb-1">Unit Number</label>
@@ -66,6 +85,7 @@ export default function AddUnitPage() {
               className="w-full px-4 py-2 rounded bg-zinc-800 border border-zinc-600"
             />
           </div>
+
           <div>
             <label className="block mb-1">Unit Title</label>
             <input
@@ -89,8 +109,6 @@ export default function AddUnitPage() {
               className="w-full px-4 py-2 rounded bg-zinc-800 border border-zinc-600"
             />
           </div>
-
-          
 
           <button
             type="submit"

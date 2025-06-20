@@ -142,7 +142,7 @@ export default function UnitDetailPage() {
                 Lecture {n}
               </div>
 
-              <div className="flex items-center gap-4 mt-2 sm:mt-0">
+              <div className="flex items-center gap-2 mt-2 ">
                 {date && (
                   <div className="flex items-center gap-1 text-sm text-zinc-300">
                     <CalendarCheck className="w-4 h-4" />

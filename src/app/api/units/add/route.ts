@@ -7,25 +7,34 @@ export async function POST(req: Request) {
     await connectDB();
 
     const body = await req.json();
-    const { title, lectures } = body;
+    const { title, lectures, paper, number } = body;
 
     if (
       typeof title !== "string" ||
-      typeof lectures !== "number"
+      typeof lectures !== "number" ||
+      typeof paper !== "string" ||
+      typeof number !== "number" ||
+      (paper !== "paper1" && paper !== "paper2")
     ) {
       return NextResponse.json({ message: "Invalid or missing fields" }, { status: 400 });
     }
 
-    const unitExists = await Unit.findOne({ title: new RegExp(`^${title}$`, 'i') });
+    // ✅ Convert user input unit number to 101, 201, etc.
+    const unitNumber = paper === "paper1" ? 100 + number : 200 + number;
+
+    // ✅ Check for duplicate unit
+    const unitExists = await Unit.findOne({ number: unitNumber, paper });
     if (unitExists) {
-      return NextResponse.json({ message: "Unit already exists" }, { status: 409 });
+      return NextResponse.json({ message: `Unit ${number} already exists in ${paper}` }, { status: 409 });
     }
 
-    // ✅ Find max number and assign next
-    const lastUnit = await Unit.findOne().sort({ number: -1 });
-    const nextNumber = lastUnit ? lastUnit.number + 1 : 1;
-
-    await new Unit({ number: nextNumber, title, lectures }).save();
+    // ✅ Save new unit with modified number
+    await new Unit({
+      number: unitNumber,
+      title,
+      lectures,
+      paper,
+    }).save();
 
     return NextResponse.json({ message: "✅ Unit created successfully." }, { status: 201 });
   } catch (error) {

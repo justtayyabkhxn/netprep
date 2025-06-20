@@ -16,7 +16,7 @@ export default function HomePage() {
         </p>
 
         <Link
-          href="/subject/cs"
+          href="/subject"
           className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 rounded-full text-white font-semibold transition"
         >
           Go to CS Tracker <ArrowRightCircle className="w-5 h-5" />
